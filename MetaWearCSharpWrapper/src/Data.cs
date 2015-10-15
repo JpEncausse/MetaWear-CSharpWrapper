@@ -10,7 +10,7 @@ namespace MbientLab.MetaWear {
 
     [StructLayout(LayoutKind.Sequential)]
     public struct Data {
-        IntPtr value;
-        DataTypeId typeId;
+        public IntPtr value;
+        public DataTypeId typeId;
     }
 }

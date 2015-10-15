@@ -10,6 +10,6 @@ namespace MbientLab.MetaWear {
         public static extern void Free(IntPtr board);
 
         [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_metawearboard_handle_response")]
-        public static extern int HandleResponse(IntPtr board, IntPtr response, byte len);
+        public static extern int HandleResponse(IntPtr board, byte[] response, byte len);
     }
 }

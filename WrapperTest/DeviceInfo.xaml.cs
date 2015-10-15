@@ -5,11 +5,13 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using Windows.ApplicationModel.Core;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -24,12 +26,14 @@ namespace MbientLab.MetaWear.Test {
     public enum ConsoleEntryType {
         SEVERE,
         INFO,
-        COMMAND
+        COMMAND,
+        SENSOR
     }
     public class ConsoleLineColorConverter : IValueConverter {
         public SolidColorBrush SevereColor { get; set; }
         public SolidColorBrush InfoColor { get; set; }
         public SolidColorBrush CommandColor { get; set; }
+        public SolidColorBrush SensorColor { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, string language) {
             switch((ConsoleEntryType) value) {
@@ -39,6 +43,8 @@ namespace MbientLab.MetaWear.Test {
                     return InfoColor;
                 case ConsoleEntryType.COMMAND:
                     return CommandColor;
+                case ConsoleEntryType.SENSOR:
+                    return SensorColor;
                 default:
                     throw new MissingMemberException("Unrecognized log level: " + value.ToString());
             }
@@ -48,15 +54,18 @@ namespace MbientLab.MetaWear.Test {
             throw new NotImplementedException();
         }
     }
-
     public class ConsoleLine {
+        public ConsoleLine(ConsoleEntryType type) {
+            this.Type = type;
+        }
+
         public ConsoleLine(ConsoleEntryType type, string value) {
             this.Type = type;
             this.Value = value;
         }
 
         public ConsoleEntryType Type { get; }
-        public string Value { get; }
+        public string Value { get; set; }
     }
 
     /// <summary>
@@ -69,7 +78,6 @@ namespace MbientLab.MetaWear.Test {
             CHARACTERISTIC_SERIAL_NUMBER= new Guid("00002a25-0000-1000-8000-00805f9b34fb"),
             CHARACTERISTIC_FIRMWARE_REVISION = new Guid("00002a26-0000-1000-8000-00805f9b34fb"),
             CHARACTERISTIC_HARDWARE_REVISION = new Guid("00002a27-0000-1000-8000-00805f9b34fb");
-
         private static readonly Dictionary<Guid, String> DEVICE_INFO_NAMES = new Dictionary<Guid, String>();
 
         static DeviceInfo() {
@@ -80,8 +88,14 @@ namespace MbientLab.MetaWear.Test {
             DEVICE_INFO_NAMES.Add(CHARACTERISTIC_HARDWARE_REVISION, "Hardware Revision");
         }
 
+        private enum Signal {
+            SWITCH
+        }
+
+        private Dictionary<Signal, IntPtr> signals = new Dictionary<Signal, IntPtr>();
         private BluetoothLEDevice selectedBtleDevice;
         private GattDeviceService mwGattService;
+        private GattCharacteristic mwNotifyChar;
         private IntPtr mwBoard;
 
         private SendCommand sendCmdDelegate;
@@ -119,41 +133,29 @@ namespace MbientLab.MetaWear.Test {
                 outputListView.Items.Add(new ConsoleLine(ConsoleEntryType.INFO, DEVICE_INFO_NAMES[characteristic.Uuid] + ": " + value));
             }
 
-            /*
-            
-
-            mwNotifyChar = mwGattService.GetCharacteristics(Constant.METAWEAR_NOTIFY_UUID).First();
+            mwNotifyChar = mwGattService.GetCharacteristics(Gatt.METAWEAR_NOTIFY_CHARACTERISTIC).First();
             await mwNotifyChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
-            mwNotifyChar.ValueChanged += new TypedEventHandler<GattCharacteristic, GattValueChangedEventArgs>(metawearNotificationHandler);
-            */
-        }
-
-        private void receivedSensorData(IntPtr signal, ref Data data) {
+            mwNotifyChar.ValueChanged += new TypedEventHandler<GattCharacteristic, GattValueChangedEventArgs>((GattCharacteristic sender, GattValueChangedEventArgs obj) => {
+                byte[] response = obj.CharacteristicValue.ToArray();
+                MetaWearBoard.HandleResponse(mwBoard, response, (byte) response.Length);
+            });
         }
 
         private string byteArrayToHex(byte[] array) {
             var builder = new StringBuilder();
 
             builder.Append(string.Format("[0x{0:X2}", array[0]));
-            for(int i = 1; i < array.Length; i++) {
+            for (int i = 1; i < array.Length; i++) {
                 builder.Append(string.Format(", 0x{0:X2}", array[i]));
             }
             builder.Append("]");
             return builder.ToString();
         }
 
-        private void startMotor(object sender, RoutedEventArgs e) {
-            Haptic.StartMotor(mwBoard, (float) 100, 5000);
-        }
-
-        private void startBuzzer(object sender, RoutedEventArgs e) {
-            Haptic.StartBuzzer(mwBoard, 5000);
-        }
-
         private async void sendMetaWearCommand(IntPtr board, IntPtr command, byte len) {
             byte[] managedArray = new byte[len];
             Marshal.Copy(command, managedArray, 0, len);
-            outputListView.Items.Add(new ConsoleLine(ConsoleEntryType.COMMAND, "Command: " + byteArrayToHex(managedArray)));            
+            outputListView.Items.Add(new ConsoleLine(ConsoleEntryType.COMMAND, "Command: " + byteArrayToHex(managedArray)));
 
             try {
                 GattCharacteristic mwCommandChar = mwGattService.GetCharacteristics(Gatt.METAWEAR_COMMAND_CHARACTERISTIC).FirstOrDefault();
@@ -164,6 +166,64 @@ namespace MbientLab.MetaWear.Test {
                 }
             } catch (Exception ex) {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+
+        private void receivedSensorData(IntPtr signal, ref Data data) {
+            object managedValue = null;
+
+            switch(data.typeId) {
+                case DataTypeId.UINT32:
+                    managedValue = Marshal.PtrToStructure<uint>(data.value);
+                    break;
+                case DataTypeId.FLOAT:
+                    managedValue= Marshal.PtrToStructure<float>(data.value);
+                    break;
+                case DataTypeId.CARTESIAN_FLOAT:
+                    managedValue = Marshal.PtrToStructure<CartesianFloat>(data.value);
+                    break;
+            }
+
+            ConsoleLine newLine = new ConsoleLine(ConsoleEntryType.SENSOR);
+
+            if (managedValue != null) {
+                if (signals[Signal.SWITCH] == signal) {
+                    newLine.Value = "Switch ";
+                    newLine.Value += ((uint)managedValue) == 0 ? "Released" : "Pressed";
+                }
+
+                if (CoreApplication.MainView.CoreWindow.Dispatcher.HasThreadAccess) {
+                    outputListView.Items.Add(newLine);
+                } else {
+                    CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                        CoreDispatcherPriority.Normal,
+                        () => outputListView.Items.Add(newLine)
+                    );
+                }
+            }
+        }
+
+        private void startMotor(object sender, RoutedEventArgs e) {
+            Haptic.StartMotor(mwBoard, (float) 100, 5000);
+        }
+
+        private void startBuzzer(object sender, RoutedEventArgs e) {
+            Haptic.StartBuzzer(mwBoard, 5000);
+        }
+
+        private void toggleSwitchSampling(object sender, RoutedEventArgs e) {
+            ToggleSwitch toggleSwitch = sender as ToggleSwitch;
+
+            if (!signals.ContainsKey(Signal.SWITCH)) {
+                signals[Signal.SWITCH] = Switch.GetStateDataSignal(mwBoard);
+            }
+
+            if (toggleSwitch != null) {
+                if (toggleSwitch.IsOn) {
+                    DataSignal.Subscribe(signals[Signal.SWITCH]);
+                } else {
+                    DataSignal.Unsubscribe(signals[Signal.SWITCH]);
+                }
             }
         }
 
