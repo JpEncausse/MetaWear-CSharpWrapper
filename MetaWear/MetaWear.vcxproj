@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,7 +18,52 @@
       <Platform>ARM</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-
+  <ItemGroup>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\accelerometer_bmi160.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\accelerometer_mma8452q.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\ambientlight_ltr329.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\barometer_bmp280.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\connection.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\datainterpreter.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\datasignal.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\debug.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\gyro_bmi160.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\haptic.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\ibeacon.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\led.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\metawearboard.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\neopixel.cpp" />
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\responseheader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\accelerometer_bmi160.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\accelerometer_mma8452q.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\ambientlight_ltr329.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\barometer_bmp280.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\connection.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\connection_def.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\constant.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\datainterpreter.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\metawearboard_def.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\register.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\responseheader.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\data.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\dataprocessor.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\datasignal.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\datasignal_fwd.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\debug.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\dllmarker.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\gyro_bmi160.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\haptic.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\ibeacon.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\led.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\metawearboard.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\metawearboard_fwd.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\neopixel.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\status.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\switch.h" />
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\types.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{d9f992a7-30b2-464f-a724-55d492cb0fcb}</ProjectGuid>
     <Keyword>WindowsRuntimeComponent</Keyword>
@@ -31,9 +75,7 @@
     <ApplicationType>Windows Phone</ApplicationType>
     <ApplicationTypeRevision>8.1</ApplicationTypeRevision>
   </PropertyGroup>
-
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -56,44 +98,37 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <PlatformToolset>v120_wp81</PlatformToolset>
   </PropertyGroup>
-
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(SolutionDir)metawear-cpp-api\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)metawear-cpp-api\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <IncludePath>$(SolutionDir)metawear-cpp-api\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <IncludePath>$(SolutionDir)metawear-cpp-api\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
-
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PreprocessorDefinitions>_WINRT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>METAWEAR_DLL_EXPORTS;_WINRT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
@@ -102,13 +137,13 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
   </ItemDefinitionGroup>
-
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PreprocessorDefinitions>_WINRT_DLL;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>METAWEAR_DLL_EXPORTS;_WINRT_DLL;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
@@ -117,13 +152,13 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
   </ItemDefinitionGroup>
-
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PreprocessorDefinitions>_WINRT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>METAWEAR_DLL_EXPORTS;_WINRT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
@@ -132,13 +167,13 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
   </ItemDefinitionGroup>
-
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PreprocessorDefinitions>_WINRT_DLL;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>METAWEAR_DLL_EXPORTS;_WINRT_DLL;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
@@ -147,27 +182,10 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
   </ItemDefinitionGroup>
-
-  <ItemGroup>
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="Class1.h" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Class1.cpp" />
-  </ItemGroup>
-
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-
 </Project>

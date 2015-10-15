@@ -1,9 +1,144 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resources">
-      <UniqueIdentifier>778d67ce-c9d9-4276-abc4-e8c8490fbce6</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="src">
+      <UniqueIdentifier>{55ec8447-7be0-4002-9669-8217bd0d895f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\metawear">
+      <UniqueIdentifier>{34979817-375e-43dd-ba7f-9ceb6bec12b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\metawear\cpp">
+      <UniqueIdentifier>{1e2ee0a8-1b71-4732-8842-03939663d9b3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\accelerometer_bmi160.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\accelerometer_mma8452q.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\ambientlight_ltr329.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\barometer_bmp280.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\connection.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\datainterpreter.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\datasignal.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\debug.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\gyro_bmi160.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\haptic.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\ibeacon.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\led.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\metawearboard.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\neopixel.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\metawear-cpp-api\src\metawear\cpp\responseheader.cpp">
+      <Filter>src\metawear\cpp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\connection_def.h">
+      <Filter>src\metawear\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\constant.h">
+      <Filter>src\metawear\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\datainterpreter.h">
+      <Filter>src\metawear\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\metawearboard_def.h">
+      <Filter>src\metawear\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\register.h">
+      <Filter>src\metawear\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\cpp\responseheader.h">
+      <Filter>src\metawear\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\accelerometer_bmi160.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\accelerometer_mma8452q.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\ambientlight_ltr329.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\barometer_bmp280.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\connection.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\data.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\dataprocessor.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\datasignal.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\datasignal_fwd.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\debug.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\dllmarker.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\gyro_bmi160.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\haptic.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\ibeacon.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\led.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\metawearboard.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\metawearboard_fwd.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\neopixel.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\status.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\switch.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\metawear-cpp-api\src\metawear\types.h">
+      <Filter>src\metawear</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

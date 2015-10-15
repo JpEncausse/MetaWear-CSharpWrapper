@@ -1,0 +1,3 @@
+[submodule "metawear-cpp-api"]
+	path = metawear-cpp-api
+	url = git@github.com:mbientlab/Metawear-CppAPI.git
