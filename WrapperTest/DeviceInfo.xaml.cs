@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Foundation;
@@ -19,20 +21,24 @@ using Windows.UI.Xaml.Navigation;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
 namespace MbientLab.MetaWear.Test {
-    public enum LogLevel {
+    public enum ConsoleEntryType {
         SEVERE,
-        INFO
+        INFO,
+        COMMAND
     }
     public class ConsoleLineColorConverter : IValueConverter {
         public SolidColorBrush SevereColor { get; set; }
         public SolidColorBrush InfoColor { get; set; }
+        public SolidColorBrush CommandColor { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, string language) {
-            switch((LogLevel) value) {
-                case LogLevel.SEVERE:
+            switch((ConsoleEntryType) value) {
+                case ConsoleEntryType.SEVERE:
                     return SevereColor;
-                case LogLevel.INFO:
+                case ConsoleEntryType.INFO:
                     return InfoColor;
+                case ConsoleEntryType.COMMAND:
+                    return CommandColor;
                 default:
                     throw new MissingMemberException("Unrecognized log level: " + value.ToString());
             }
@@ -44,12 +50,12 @@ namespace MbientLab.MetaWear.Test {
     }
 
     public class ConsoleLine {
-        public ConsoleLine(LogLevel level, string value) {
-            this.Level = level;
+        public ConsoleLine(ConsoleEntryType type, string value) {
+            this.Type = type;
             this.Value = value;
         }
 
-        public LogLevel Level { get; }
+        public ConsoleEntryType Type { get; }
         public string Value { get; }
     }
 
@@ -63,6 +69,7 @@ namespace MbientLab.MetaWear.Test {
             CHARACTERISTIC_SERIAL_NUMBER= new Guid("00002a25-0000-1000-8000-00805f9b34fb"),
             CHARACTERISTIC_FIRMWARE_REVISION = new Guid("00002a26-0000-1000-8000-00805f9b34fb"),
             CHARACTERISTIC_HARDWARE_REVISION = new Guid("00002a27-0000-1000-8000-00805f9b34fb");
+
         private static readonly Dictionary<Guid, String> DEVICE_INFO_NAMES = new Dictionary<Guid, String>();
 
         static DeviceInfo() {
@@ -73,10 +80,26 @@ namespace MbientLab.MetaWear.Test {
             DEVICE_INFO_NAMES.Add(CHARACTERISTIC_HARDWARE_REVISION, "Hardware Revision");
         }
 
-        private BluetoothLEDevice mwBoard;
+        private BluetoothLEDevice selectedBtleDevice;
+        private GattDeviceService mwGattService;
+        private IntPtr mwBoard;
+
+        private SendCommand sendCmdDelegate;
+        private ReceivedSensorData receivedSensorDataDelegate;
+        private Connection conn;
 
         public DeviceInfo() {
             this.InitializeComponent();
+
+            mwBoard = MetaWearBoard.Create();
+
+            sendCmdDelegate = new SendCommand(sendMetaWearCommand);
+            receivedSensorDataDelegate = new ReceivedSensorData(receivedSensorData);
+
+            conn = new Connection();
+            conn.sendCommandDelegate = Marshal.GetFunctionPointerForDelegate<SendCommand>(sendCmdDelegate);
+            conn.receivedSensorDataDelegate = Marshal.GetFunctionPointerForDelegate<ReceivedSensorData>(receivedSensorDataDelegate);
+            Connection.Init(ref conn);
         }
 
         /// <summary>
@@ -85,23 +108,80 @@ namespace MbientLab.MetaWear.Test {
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
         protected override async void OnNavigatedTo(NavigationEventArgs e) {
-            mwBoard = (BluetoothLEDevice) e.Parameter;
+            selectedBtleDevice = (BluetoothLEDevice) e.Parameter;
+            mwGattService = selectedBtleDevice.GetGattService(Gatt.METAWEAR_SERVICE);
 
-            foreach(var characteristic in mwBoard.GetGattService(DEVICE_INFO_SERVICE).GetAllCharacteristics()) {
+            foreach(var characteristic in selectedBtleDevice.GetGattService(DEVICE_INFO_SERVICE).GetAllCharacteristics()) {
                 var result = await characteristic.ReadValueAsync();
                 string value = result.Status == GattCommunicationStatus.Success ?
                     System.Text.Encoding.UTF8.GetString(result.Value.ToArray(), 0, (int)result.Value.Length) :
                     "N/A";
-                outputListView.Items.Add(new ConsoleLine(LogLevel.INFO, DEVICE_INFO_NAMES[characteristic.Uuid] + ": " + value));
+                outputListView.Items.Add(new ConsoleLine(ConsoleEntryType.INFO, DEVICE_INFO_NAMES[characteristic.Uuid] + ": " + value));
             }
 
             /*
-            mwGattService = ((BluetoothLEDevice) e.Parameter).GetGattService(Gatt.METAWEAR_SERVICE);
+            
 
             mwNotifyChar = mwGattService.GetCharacteristics(Constant.METAWEAR_NOTIFY_UUID).First();
             await mwNotifyChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
             mwNotifyChar.ValueChanged += new TypedEventHandler<GattCharacteristic, GattValueChangedEventArgs>(metawearNotificationHandler);
             */
+        }
+
+        private void receivedSensorData(IntPtr signal, ref Data data) {
+        }
+
+        private string byteArrayToHex(byte[] array) {
+            var builder = new StringBuilder();
+
+            builder.Append(string.Format("[0x{0:X2}", array[0]));
+            for(int i = 1; i < array.Length; i++) {
+                builder.Append(string.Format(", 0x{0:X2}", array[i]));
+            }
+            builder.Append("]");
+            return builder.ToString();
+        }
+
+        private async void sendMetaWearCommand(IntPtr board, IntPtr command, byte len) {
+            byte[] managedArray = new byte[len];
+            Marshal.Copy(command, managedArray, 0, len);
+            outputListView.Items.Add(new ConsoleLine(ConsoleEntryType.COMMAND, "Command: " + byteArrayToHex(managedArray)));            
+
+            try {
+                GattCharacteristic mwCommandChar = mwGattService.GetCharacteristics(Gatt.METAWEAR_COMMAND_CHARACTERISTIC).FirstOrDefault();
+                GattCommunicationStatus status = await mwCommandChar.WriteValueAsync(managedArray.AsBuffer(), GattWriteOption.WriteWithoutResponse);
+
+                if (status != GattCommunicationStatus.Success) {
+                    outputListView.Items.Add(new ConsoleLine(ConsoleEntryType.SEVERE, "Error writing command, GattCommunicationStatus= " + status));
+                }
+            } catch (Exception ex) {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+
+        private void ledRedOn(object sender, RoutedEventArgs e) {
+            Led.Pattern pattern = new Led.Pattern();
+            Led.LoadPresetPattern(ref pattern, Led.PatternPreset.SOLID);
+            Led.WritePattern(mwBoard, ref pattern, Led.Color.RED);
+            Led.Play(mwBoard);
+        }
+
+        private void ledGreenOn(object sender, RoutedEventArgs e) {
+            Led.Pattern pattern = new Led.Pattern();
+            Led.LoadPresetPattern(ref pattern, Led.PatternPreset.BLINK);
+            Led.WritePattern(mwBoard, ref pattern, Led.Color.GREEN);
+            Led.Play(mwBoard);
+        }
+
+        private void ledBlueOn(object sender, RoutedEventArgs e) {
+            Led.Pattern pattern = new Led.Pattern();
+            Led.LoadPresetPattern(ref pattern, Led.PatternPreset.PULSE);
+            Led.WritePattern(mwBoard, ref pattern, Led.Color.BLUE);
+            Led.Play(mwBoard);
+        }
+
+        private void ledOff(object sender, RoutedEventArgs e) {
+            Led.StopAndClear(mwBoard);
         }
     }
 }

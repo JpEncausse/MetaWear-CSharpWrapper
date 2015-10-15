@@ -10,15 +10,34 @@
 
 
     <Page.Resources>
-        <local:ConsoleLineColorConverter x:Key="consoleColorConverter" SevereColor="Red" InfoColor="White" />
+        <local:ConsoleLineColorConverter x:Key="consoleColorConverter" SevereColor="Red" InfoColor="White" CommandColor="Green"/>
     </Page.Resources>
     
     <Grid>
-        <ListView x:Name="outputListView" Height="460" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0" x:Name="LedButtons" Margin="10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3.3*" />
+                <ColumnDefinition Width="3.3*" />
+                <ColumnDefinition Width="3.3*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Foreground="Red" Content="Led Red" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="ledRedOn"/>
+            <Button Foreground="Green" Content="Led Green" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" Click="ledGreenOn"/>
+            <Button Foreground="Blue" Content="Led Blue" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="2" Click="ledBlueOn"/>
+        </Grid>
+        <Button Grid.Row="1" Content="Led Off" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="ledOff" Margin="10,0"/>
+        
+        <ListView Grid.Row="2" x:Name="outputListView" Height="500" Margin="10,0">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock x:Name="outputLine" Text="{Binding Value}" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
-                        Foreground="{Binding Level, Converter={StaticResource consoleColorConverter}}"
+                        Foreground="{Binding Type, Converter={StaticResource consoleColorConverter}}"
                         VerticalAlignment="Top" FontSize="24" Margin="10,10,0,0" />
                 </DataTemplate>
             </ListView.ItemTemplate>
