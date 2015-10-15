@@ -142,6 +142,14 @@ namespace MbientLab.MetaWear.Test {
             return builder.ToString();
         }
 
+        private void startMotor(object sender, RoutedEventArgs e) {
+            Haptic.StartMotor(mwBoard, (float) 100, 5000);
+        }
+
+        private void startBuzzer(object sender, RoutedEventArgs e) {
+            Haptic.StartBuzzer(mwBoard, 5000);
+        }
+
         private async void sendMetaWearCommand(IntPtr board, IntPtr command, byte len) {
             byte[] managedArray = new byte[len];
             Marshal.Copy(command, managedArray, 0, len);
