@@ -8,7 +8,20 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
 
+    <Page.Resources>
+        <local:ConsoleLineColorConverter x:Key="consoleColorConverter" SevereColor="Red" InfoColor="White" />
+    </Page.Resources>
+    
+    <Grid>
+        <ListView x:Name="outputListView" Height="460" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock x:Name="outputLine" Text="{Binding Value}" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
+                        Foreground="{Binding Level, Converter={StaticResource consoleColorConverter}}"
+                        VerticalAlignment="Top" FontSize="24" Margin="10,10,0,0" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>
