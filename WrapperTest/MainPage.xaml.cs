@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Devices.Bluetooth;
+using Windows.Devices.Enumeration;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -33,7 +35,7 @@ namespace MbientLab.MetaWear.Test {
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             // TODO: Prepare page for display here.
 
@@ -42,6 +44,21 @@ namespace MbientLab.MetaWear.Test {
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
+
+            foreach (DeviceInformation di in await DeviceInformation.FindAllAsync(BluetoothLEDevice.GetDeviceSelector())) {
+                BluetoothLEDevice bleDevice = await BluetoothLEDevice.FromIdAsync(di.Id);
+                pairedDevicesListView.Items.Add(bleDevice);
+            }
+        }
+
+        private void SelectedBtleDevice(object sender, SelectionChangedEventArgs e) {
+            //Get the data object that represents the current selected item
+            BluetoothLEDevice myobject = (sender as ListView).SelectedItem as BluetoothLEDevice;
+
+            //Checks whether that it is not null 
+            if (myobject != null) {
+                this.Frame.Navigate(typeof(DeviceInfo), myobject);
+            }
         }
     }
 }

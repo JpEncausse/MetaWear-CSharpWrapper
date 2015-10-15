@@ -9,6 +9,17 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <ListView x:Name="pairedDevicesListView" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="SelectedBtleDevice">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock x:Name="nameblock" Text="{Binding Name}" HorizontalAlignment="Left" TextWrapping="Wrap" 
+                                   VerticalAlignment="Top" Height="57" Width="236" FontSize="36" Margin="10,10,0,0" />
+                        <TextBlock x:Name="connectedblock" Text="{Binding ConnectionStatus}" HorizontalAlignment="Left" TextWrapping="Wrap" 
+                                   VerticalAlignment="Top" Height="57" Width="236" FontSize="20" Margin="10,10,0,0" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>
