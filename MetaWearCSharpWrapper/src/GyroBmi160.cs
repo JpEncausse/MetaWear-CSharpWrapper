@@ -23,28 +23,28 @@ namespace MbientLab.MetaWear {
             FSR_125DPS
         };
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_get_rotation_data_signal")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_get_rotation_data_signal", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr GetRotationDataSignal(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_set_odr")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_set_odr", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetOutputDataRate(IntPtr board, OutputDataRate odr);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_set_range")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_set_range", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetFullScaleRange(IntPtr board, FullScaleRange range);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_write_config")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_write_config", CallingConvention = CallingConvention.Cdecl)]
         public static extern void WriteConfig(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_start")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_start", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Start(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_stop")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_stop", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Stop(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_enable_rotation_sampling")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_enable_rotation_sampling", CallingConvention = CallingConvention.Cdecl)]
         public static extern void EnableRotationSampling(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_disable_rotation_sampling")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_gyro_bmi160_disable_rotation_sampling", CallingConvention = CallingConvention.Cdecl)]
         public static extern void DisableRotationSampling(IntPtr board);
     }
 }

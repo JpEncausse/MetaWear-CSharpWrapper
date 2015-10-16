@@ -36,7 +36,8 @@
             <Button Content="Start Motor" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="0" Click="startMotor"/>
             <Button Content="Start Buzzer" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" Click="startBuzzer"/>
         </Grid>
-        
+
+        <ToggleSwitch Header="Accelerometer" HorizontalAlignment="Stretch" VerticalAlignment="Top" Toggled="toggleAccelerationSampling" Margin="10,0,6,0" />
         <ToggleSwitch Header="Switch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Toggled="toggleSwitchSampling" Margin="10,0,6,0"/>
         
         <ListView x:Name="outputListView" Height="465" Margin="10,0">

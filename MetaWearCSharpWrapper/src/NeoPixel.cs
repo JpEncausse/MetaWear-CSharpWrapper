@@ -15,34 +15,34 @@ namespace MbientLab.MetaWear {
             AWAY
         };
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_init_slow_strand")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_init_slow_strand", CallingConvention = CallingConvention.Cdecl)]
         public static extern void InitSlowStrand(IntPtr board, byte strand, byte gpioPin, byte nPixels, ColorOrdering ordering);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_init_fast_strand")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_init_fast_strand", CallingConvention = CallingConvention.Cdecl)]
         public static extern void InitFastStrand(IntPtr board, byte strand, byte gpioPin, byte nPixels, ColorOrdering ordering);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_free_strand")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_free_strand", CallingConvention = CallingConvention.Cdecl)]
         public static extern void FreeStrand(IntPtr board, byte strand);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_enable_hold")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_enable_hold", CallingConvention = CallingConvention.Cdecl)]
         public static extern void EnableHold(IntPtr board, byte strand);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_disable_hold")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_disable_hold", CallingConvention = CallingConvention.Cdecl)]
         public static extern void DisableHold(IntPtr board, byte strand);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_clear")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_clear", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Clear(IntPtr board, byte strand, byte start, byte end);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_set_color")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_set_color", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetColor(IntPtr board, byte strand, byte pixel, byte red, byte green, byte blue);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_rotate")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_rotate", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Rotate(IntPtr board, byte strand, byte count, ushort period, RotDirection direction);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_rotate_indefinitely")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_rotate_indefinitely", CallingConvention = CallingConvention.Cdecl)]
         public static extern void RotateIndefinitely(IntPtr board, byte strand, ushort period, RotDirection direction);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_stop_rotation")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_neopixel_stop_rotation", CallingConvention = CallingConvention.Cdecl)]
         public static extern void StopRotation(IntPtr board, byte strand);
     }
 }

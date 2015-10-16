@@ -33,25 +33,25 @@ namespace MbientLab.MetaWear {
             RATE_2000MS
         };
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_get_illuminance_data_signal")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_get_illuminance_data_signal", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr GetIlluminanceDataSignal(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_set_gain")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_set_gain", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetGain(IntPtr board, SensorGain gain);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_set_integration_time")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_set_integration_time", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetIntegrationTime(IntPtr board, IntegrationTime time);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_set_measurement_rate")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_set_measurement_rate", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetMeasurementRate(IntPtr board, MeasurementRate rate);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_write_config")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_write_config", CallingConvention = CallingConvention.Cdecl)]
         public static extern void WriteConfig(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_start")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_start", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Start(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_stop")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_als_ltr329_stop", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Stop(IntPtr board);
     }
 }

@@ -89,17 +89,17 @@ namespace MbientLab.MetaWear.Test {
         }
 
         private enum Signal {
-            SWITCH
+            SWITCH,
+            ACCELEROMETER
         }
 
         private Dictionary<Signal, IntPtr> signals = new Dictionary<Signal, IntPtr>();
+        private Dictionary<Guid, string> mwDeviceInfoChars = new Dictionary<Guid, string>();
         private BluetoothLEDevice selectedBtleDevice;
         private GattDeviceService mwGattService;
         private GattCharacteristic mwNotifyChar;
         private IntPtr mwBoard;
 
-        private SendCommand sendCmdDelegate;
-        private ReceivedSensorData receivedSensorDataDelegate;
         private Connection conn;
 
         public DeviceInfo() {
@@ -107,12 +107,9 @@ namespace MbientLab.MetaWear.Test {
 
             mwBoard = MetaWearBoard.Create();
 
-            sendCmdDelegate = new SendCommand(sendMetaWearCommand);
-            receivedSensorDataDelegate = new ReceivedSensorData(receivedSensorData);
-
             conn = new Connection();
-            conn.sendCommandDelegate = Marshal.GetFunctionPointerForDelegate<SendCommand>(sendCmdDelegate);
-            conn.receivedSensorDataDelegate = Marshal.GetFunctionPointerForDelegate<ReceivedSensorData>(receivedSensorDataDelegate);
+            conn.sendCommandDelegate = new SendCommand(sendMetaWearCommand);
+            conn.receivedSensorDataDelegate = new ReceivedSensorData(receivedSensorData);
             Connection.Init(ref conn);
         }
 
@@ -130,6 +127,7 @@ namespace MbientLab.MetaWear.Test {
                 string value = result.Status == GattCommunicationStatus.Success ?
                     System.Text.Encoding.UTF8.GetString(result.Value.ToArray(), 0, (int)result.Value.Length) :
                     "N/A";
+                mwDeviceInfoChars.Add(characteristic.Uuid, value);
                 outputListView.Items.Add(new ConsoleLine(ConsoleEntryType.INFO, DEVICE_INFO_NAMES[characteristic.Uuid] + ": " + value));
             }
 
@@ -137,7 +135,7 @@ namespace MbientLab.MetaWear.Test {
             await mwNotifyChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
             mwNotifyChar.ValueChanged += new TypedEventHandler<GattCharacteristic, GattValueChangedEventArgs>((GattCharacteristic sender, GattValueChangedEventArgs obj) => {
                 byte[] response = obj.CharacteristicValue.ToArray();
-                MetaWearBoard.HandleResponse(mwBoard, response, (byte) response.Length);
+                MetaWearBoard.HandleResponse(mwBoard, response, (byte)response.Length);
             });
         }
 
@@ -187,9 +185,11 @@ namespace MbientLab.MetaWear.Test {
             ConsoleLine newLine = new ConsoleLine(ConsoleEntryType.SENSOR);
 
             if (managedValue != null) {
-                if (signals[Signal.SWITCH] == signal) {
+                if (signals.ContainsKey(Signal.SWITCH) && signals[Signal.SWITCH] == signal) {
                     newLine.Value = "Switch ";
                     newLine.Value += ((uint)managedValue) == 0 ? "Released" : "Pressed";
+                } else if (signals.ContainsKey(Signal.ACCELEROMETER) && signals[Signal.ACCELEROMETER] == signal) {
+                    newLine.Value = "Acceleration: " + managedValue.ToString();
                 }
 
                 if (CoreApplication.MainView.CoreWindow.Dispatcher.HasThreadAccess) {
@@ -209,6 +209,52 @@ namespace MbientLab.MetaWear.Test {
 
         private void startBuzzer(object sender, RoutedEventArgs e) {
             Haptic.StartBuzzer(mwBoard, 5000);
+        }
+
+        private void toggleAccelerationSampling(object sender, RoutedEventArgs e) {
+            ToggleSwitch toggleSwitch = sender as ToggleSwitch;
+
+            if (mwDeviceInfoChars[CHARACTERISTIC_MODEL_NUMBER].Equals("0")) {
+                if (!signals.ContainsKey(Signal.ACCELEROMETER)) {
+                    signals[Signal.ACCELEROMETER] = AccelerometerMma8452q.GetAccelerationDataSignal(mwBoard);
+                }
+
+                if (toggleSwitch != null) {
+                    if (toggleSwitch.IsOn) {
+                        AccelerometerMma8452q.SetOutputDataRate(mwBoard, AccelerometerMma8452q.OutputDataRate.ODR_12_5HZ);
+                        AccelerometerMma8452q.SetFullScaleRange(mwBoard, AccelerometerMma8452q.FullScaleRange.FSR_8G);
+                        AccelerometerMma8452q.WriteAccelerationConfig(mwBoard);
+
+                        DataSignal.Subscribe(signals[Signal.ACCELEROMETER]);
+                        AccelerometerMma8452q.EnableAccelerationSampling(mwBoard);
+                        AccelerometerMma8452q.Start(mwBoard);
+                    } else {
+                        AccelerometerMma8452q.Stop(mwBoard);
+                        AccelerometerMma8452q.DisableAccelerationSampling(mwBoard);
+                        DataSignal.Unsubscribe(signals[Signal.ACCELEROMETER]);
+                    }
+                }
+            } else {
+                if (!signals.ContainsKey(Signal.ACCELEROMETER)) {
+                    signals[Signal.ACCELEROMETER] = AccelerometerBmi160.GetAccelerationDataSignal(mwBoard);
+                }
+
+                if (toggleSwitch != null) {
+                    if (toggleSwitch.IsOn) {
+                        AccelerometerBmi160.SetOutputDataRate(mwBoard, AccelerometerBmi160.OutputDataRate.ODR_12_5HZ);
+                        AccelerometerBmi160.SetFullScaleRange(mwBoard, AccelerometerBmi160.FullScaleRange.FSR_8G);
+                        AccelerometerBmi160.WriteAccelerationConfig(mwBoard);
+
+                        DataSignal.Subscribe(signals[Signal.ACCELEROMETER]);
+                        AccelerometerBmi160.EnableAccelerationSampling(mwBoard);
+                        AccelerometerBmi160.Start(mwBoard);
+                    } else {
+                        AccelerometerBmi160.Stop(mwBoard);
+                        AccelerometerBmi160.DisableAccelerationSampling(mwBoard);
+                        DataSignal.Unsubscribe(signals[Signal.ACCELEROMETER]);
+                    }
+                }
+            }
         }
 
         private void toggleSwitchSampling(object sender, RoutedEventArgs e) {

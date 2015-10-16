@@ -28,25 +28,25 @@ namespace MbientLab.MetaWear {
             byte repeatCount;
         }
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_load_preset_pattern")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_load_preset_pattern", CallingConvention = CallingConvention.Cdecl)]
         public static extern void LoadPresetPattern(ref Pattern pattern, PatternPreset preset);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_write_pattern")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_write_pattern", CallingConvention = CallingConvention.Cdecl)]
         public static extern void WritePattern(IntPtr board, ref Pattern pattern, Color color);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_autoplay")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_autoplay", CallingConvention = CallingConvention.Cdecl)]
         public static extern void AutoPlay(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_play")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_play", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Play(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_pause")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_pause", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Pause(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_stop")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_stop", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Stop(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_stop_and_clear")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_led_stop_and_clear", CallingConvention = CallingConvention.Cdecl)]
         public static extern void StopAndClear(IntPtr board);
     }
 }

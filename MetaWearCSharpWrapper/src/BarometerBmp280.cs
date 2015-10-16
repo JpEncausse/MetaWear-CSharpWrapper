@@ -32,28 +32,28 @@ namespace MbientLab.MetaWear {
             TIME_4000MS
         };
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_get_pressure_data_signal")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_get_pressure_data_signal", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr GetPressureDataSignal(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_get_altitude_data_signal")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_get_altitude_data_signal", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr GetAltitudeDataSignal(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_set_oversampling")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_set_oversampling", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetOversampling(IntPtr board, Oversampling oversampling);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_set_iir_filter")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_set_iir_filter", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetIirFilter(IntPtr board, IirFilter filter);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_set_standby_time")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_set_standby_time", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetStandbyTime(IntPtr board, StandBy standbyTime);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_write_config")]
-        public static extern IntPtr WriteConfig(IntPtr board);
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_write_config", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void WriteConfig(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_start")]
-        public static extern IntPtr Start(IntPtr board);
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_start", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Start(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_stop")]
-        public static extern IntPtr Stop(IntPtr board);
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_baro_bmp280_stop", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Stop(IntPtr board);
     }
 }

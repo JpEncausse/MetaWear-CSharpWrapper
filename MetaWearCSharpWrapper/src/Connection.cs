@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MbientLab.MetaWear {
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void SendCommand(IntPtr board, IntPtr command, byte length);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void ReceivedSensorData(IntPtr signal, ref Data sensorData);
 
     [StructLayout(LayoutKind.Sequential)]
@@ -14,13 +16,15 @@ namespace MbientLab.MetaWear {
         /// <summary>
         /// Pointer to the function for the SendCommand delegate 
         /// </summary>
-        public IntPtr sendCommandDelegate;
+        [MarshalAs(UnmanagedType.FunctionPtr)]
+        public SendCommand sendCommandDelegate;
         /// <summary>
         /// Pointer to the function for the ReceivedSensorData delegate
         /// </summary>
-        public IntPtr receivedSensorDataDelegate;
+        [MarshalAs(UnmanagedType.FunctionPtr)]
+        public ReceivedSensorData receivedSensorDataDelegate;
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_connection_init")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_connection_init", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Init(ref Connection conn);
     }
 

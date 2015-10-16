@@ -20,28 +20,28 @@ namespace MbientLab.MetaWear {
             ODR_1_56HZ
         }
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_get_acceleration_data_signal")]
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_get_acceleration_data_signal", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr GetAccelerationDataSignal(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_set_odr")]
-        public static extern IntPtr SetOutputDataRate(IntPtr board, OutputDataRate odr);
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_set_odr", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetOutputDataRate(IntPtr board, OutputDataRate odr);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_set_range")]
-        public static extern IntPtr SetFullScaleRange(IntPtr board, FullScaleRange range);
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_set_range", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetFullScaleRange(IntPtr board, FullScaleRange range);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_write_acceleration_config")]
-        public static extern IntPtr WriteAccelerationConfig(IntPtr board);
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_write_acceleration_config", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void WriteAccelerationConfig(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_start")]
-        public static extern IntPtr Start(IntPtr board);
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_start", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Start(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_stop")]
-        public static extern IntPtr Stop(IntPtr board);
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_stop", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Stop(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_enable_acceleration_sampling")]
-        public static extern IntPtr EnableAccelerationSampling(IntPtr board);
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_enable_acceleration_sampling", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void EnableAccelerationSampling(IntPtr board);
 
-        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_disable_acceleration_sampling")]
-        public static extern IntPtr DisableAccelerationSampling(IntPtr board);
+        [DllImport(Constant.METAWEAR_DLL, EntryPoint = "mbl_mw_acc_mma8452q_disable_acceleration_sampling", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void DisableAccelerationSampling(IntPtr board);
     }
 }
