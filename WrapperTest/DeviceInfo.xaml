@@ -38,6 +38,9 @@
         </Grid>
 
         <ToggleSwitch Header="Accelerometer" HorizontalAlignment="Stretch" VerticalAlignment="Top" Toggled="toggleAccelerationSampling" Margin="10,0,6,0" />
+        <ToggleSwitch Header="Ambient Light" HorizontalAlignment="Stretch" VerticalAlignment="Top" Toggled="toggleAmbientLightSampling" Margin="10,0,6,0" />
+        <ToggleSwitch Header="Barometer" HorizontalAlignment="Stretch" VerticalAlignment="Top" Toggled="toggleBarometerSampling" Margin="10,0,6,0" />
+        <ToggleSwitch Header="Gyro" HorizontalAlignment="Stretch" VerticalAlignment="Top" Toggled="toggleGyroSampling" Margin="10,0,6,0" />
         <ToggleSwitch Header="Switch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Toggled="toggleSwitchSampling" Margin="10,0,6,0"/>
         
         <ListView x:Name="outputListView" Height="465" Margin="10,0">

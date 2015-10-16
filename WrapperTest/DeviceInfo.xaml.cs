@@ -90,7 +90,11 @@ namespace MbientLab.MetaWear.Test {
 
         private enum Signal {
             SWITCH,
-            ACCELEROMETER
+            ACCELEROMETER,
+            BMP280_PRESSURE,
+            BMP280_ALTITUDE,
+            AMBIENT_LIGHT,
+            GYRO
         }
 
         private Dictionary<Signal, IntPtr> signals = new Dictionary<Signal, IntPtr>();
@@ -190,6 +194,16 @@ namespace MbientLab.MetaWear.Test {
                     newLine.Value += ((uint)managedValue) == 0 ? "Released" : "Pressed";
                 } else if (signals.ContainsKey(Signal.ACCELEROMETER) && signals[Signal.ACCELEROMETER] == signal) {
                     newLine.Value = "Acceleration: " + managedValue.ToString();
+                } else if (signals.ContainsKey(Signal.BMP280_ALTITUDE) && signals[Signal.BMP280_ALTITUDE] == signal) {
+                    newLine.Value = string.Format("Altitude: {0:F3}m", (float) managedValue);
+                } else if (signals.ContainsKey(Signal.BMP280_PRESSURE) && signals[Signal.BMP280_PRESSURE] == signal) {
+                    newLine.Value = string.Format("Pressure: {0:F3}pa", (float) managedValue);
+                } else if (signals.ContainsKey(Signal.AMBIENT_LIGHT) && signals[Signal.AMBIENT_LIGHT] == signal) {
+                    newLine.Value = string.Format("Illuminance: {0:D}mlx", (uint)managedValue);
+                } else if (signals.ContainsKey(Signal.GYRO) && signals[Signal.GYRO] == signal) {
+                    newLine.Value = string.Format("Rotation: {0:S} \u00B0/s", managedValue.ToString());
+                } else {
+                    newLine.Value = "Unexpected signal data";
                 }
 
                 if (CoreApplication.MainView.CoreWindow.Dispatcher.HasThreadAccess) {
@@ -253,6 +267,68 @@ namespace MbientLab.MetaWear.Test {
                         AccelerometerBmi160.DisableAccelerationSampling(mwBoard);
                         DataSignal.Unsubscribe(signals[Signal.ACCELEROMETER]);
                     }
+                }
+            }
+        }
+
+        private void toggleBarometerSampling(object sender, RoutedEventArgs e) {
+            ToggleSwitch toggleSwitch = sender as ToggleSwitch;
+
+            if (!signals.ContainsKey(Signal.BMP280_PRESSURE)) {
+                signals[Signal.BMP280_PRESSURE] = BarometerBmp280.GetPressureDataSignal(mwBoard);
+            }
+            if (!signals.ContainsKey(Signal.BMP280_ALTITUDE)) {
+                signals[Signal.BMP280_ALTITUDE] = BarometerBmp280.GetAltitudeDataSignal(mwBoard);
+            }
+
+            if (toggleSwitch != null) {
+                if (toggleSwitch.IsOn) {
+                    DataSignal.Subscribe(signals[Signal.BMP280_ALTITUDE]);
+                    DataSignal.Subscribe(signals[Signal.BMP280_PRESSURE]);
+                    BarometerBmp280.Start(mwBoard);
+                } else {
+                    BarometerBmp280.Stop(mwBoard);
+                    DataSignal.Unsubscribe(signals[Signal.BMP280_ALTITUDE]);
+                    DataSignal.Unsubscribe(signals[Signal.BMP280_PRESSURE]);
+                }
+            }
+        }
+
+        private void toggleAmbientLightSampling(object sender, RoutedEventArgs e) {
+            ToggleSwitch toggleSwitch = sender as ToggleSwitch;
+            if (!signals.ContainsKey(Signal.AMBIENT_LIGHT)) {
+                signals[Signal.AMBIENT_LIGHT] = AmbientLightLtr329.GetIlluminanceDataSignal(mwBoard);
+            }
+
+            if (toggleSwitch != null) {
+                if (toggleSwitch.IsOn) {
+                    DataSignal.Subscribe(signals[Signal.AMBIENT_LIGHT]);
+                    AmbientLightLtr329.Start(mwBoard);
+                } else {
+                    AmbientLightLtr329.Stop(mwBoard);
+                    DataSignal.Unsubscribe(signals[Signal.AMBIENT_LIGHT]);
+                }
+            }
+        }
+
+        private void toggleGyroSampling(object sender, RoutedEventArgs e) {
+            ToggleSwitch toggleSwitch = sender as ToggleSwitch;
+            if (!signals.ContainsKey(Signal.GYRO)) {
+                signals[Signal.GYRO] = GyroBmi160.GetRotationDataSignal(mwBoard);
+            }
+
+            if (toggleSwitch != null) {
+                if (toggleSwitch.IsOn) {
+                    DataSignal.Subscribe(signals[Signal.GYRO]);
+                    GyroBmi160.SetOutputDataRate(mwBoard, GyroBmi160.OutputDataRate.ODR_25HZ);
+                    GyroBmi160.SetFullScaleRange(mwBoard, GyroBmi160.FullScaleRange.FSR_500DPS);
+                    GyroBmi160.WriteConfig(mwBoard);
+                    GyroBmi160.EnableRotationSampling(mwBoard);
+                    GyroBmi160.Start(mwBoard);
+                } else {
+                    GyroBmi160.Stop(mwBoard);
+                    GyroBmi160.DisableRotationSampling(mwBoard);
+                    DataSignal.Unsubscribe(signals[Signal.GYRO]);
                 }
             }
         }
