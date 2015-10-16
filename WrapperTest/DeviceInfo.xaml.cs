@@ -46,7 +46,7 @@ namespace MbientLab.MetaWear.Test {
                 case ConsoleEntryType.SENSOR:
                     return SensorColor;
                 default:
-                    throw new MissingMemberException("Unrecognized log level: " + value.ToString());
+                    throw new MissingMemberException("Unrecognized console entry type: " + value.ToString());
             }
         }
 

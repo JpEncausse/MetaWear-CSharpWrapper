@@ -18,6 +18,26 @@ using Windows.UI.Xaml.Navigation;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
 namespace MbientLab.MetaWear.Test {
+    public class ConnectionStateColorConverter : IValueConverter {
+        public SolidColorBrush ConnectedColor { get; set; }
+        public SolidColorBrush DisconnectedColor { get; set; }
+
+        public object Convert(object value, Type targetType, object parameter, string language) {
+            switch((BluetoothConnectionStatus) value) {
+                case BluetoothConnectionStatus.Connected:
+                    return ConnectedColor;
+                case BluetoothConnectionStatus.Disconnected:
+                    return DisconnectedColor;
+                default:
+                    throw new MissingMemberException("Unrecognized connection status: " + value.ToString());
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language) {
+            throw new NotImplementedException();
+        }
+    }
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -35,7 +55,7 @@ namespace MbientLab.MetaWear.Test {
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             // TODO: Prepare page for display here.
 
@@ -45,12 +65,16 @@ namespace MbientLab.MetaWear.Test {
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
 
+            retrieveDevices();
+        }
+
+        private async void retrieveDevices() {
+            pairedDevicesListView.Items.Clear();
             foreach (DeviceInformation di in await DeviceInformation.FindAllAsync(BluetoothLEDevice.GetDeviceSelector())) {
                 BluetoothLEDevice bleDevice = await BluetoothLEDevice.FromIdAsync(di.Id);
                 pairedDevicesListView.Items.Add(bleDevice);
             }
         }
-
         private void SelectedBtleDevice(object sender, SelectionChangedEventArgs e) {
             //Get the data object that represents the current selected item
             BluetoothLEDevice myobject = (sender as ListView).SelectedItem as BluetoothLEDevice;
@@ -59,6 +83,10 @@ namespace MbientLab.MetaWear.Test {
             if (myobject != null) {
                 this.Frame.Navigate(typeof(DeviceInfo), myobject);
             }
+        }
+
+        private void refreshDevices(object sender, RoutedEventArgs e) {
+            retrieveDevices();
         }
     }
 }

@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -34,7 +35,23 @@ namespace MbientLab.MetaWear.Test {
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+
+#if WINDOWS_PHONE_APP
+            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+#endif
         }
+
+#if WINDOWS_PHONE_APP
+        // back button press from http://stackoverflow.com/a/24336005
+        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e) {
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            if (rootFrame != null && rootFrame.CanGoBack) {
+                e.Handled = true;
+                rootFrame.GoBack();
+            }
+        }
+#endif
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
